@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>test</title>
+<script src="js/render_api_basic.js"></script>
+<link rel="stylesheet" type="text/css" href="css/api_basic.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Nanum+Myeongjo&display=swap');
+
+body {
+    font-family: sans-serif;
+}
+
+h2 , h3 , h4 , h5 {
+    font-family: "Nanum Myeongjo" , serif;
+}
+h2 {
+    margin-top: 100px;
+    padding: 5px;
+    background-color: #000;
+    color: #eee;
+    text-align: center;
+}
+h3 {
+    margin-top: 70px;
+    padding: 5px;
+    border-bottom: #222 5px solid;
+    text-align: center;
+}
+h4 {
+    border-bottom: #222 3px dashed;
+}
+.hn {
+    font-size: 60%;
+}
+
+table {
+    width: 100%;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    background-color: white;
+    font-family: sans-serif;
+    color: black;
+}
+caption {
+    padding: 6px 3px 3px 1px;
+    text-align: center;
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: bold;
+}
+td , th {
+    border: 1px solid black;
+    padding: 1px 3px;
+}
+
+.code {
+    font-family: Consolas, monospace;
+}
+
+</style>
+</head>
+<body>
+
+<h1>연동규격서 만들기 TEST</h1>
+
+<ul id="charye"
+    style="
+        padding: 10px;
+        border: 1px dotted #444;
+        list-style: none;
+    "
+></ul>
+
+<div id="content"></div>
+
+<script>
+const docEl_charye  = document.getElementById('charye');
+const docEl_content = document.getElementById('content');
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('content-data.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            try{
+                contentsRender( data );
+            }catch( err ){
+                console.error('failed to contentsRender ... ', err);
+            }
+        })
+        .catch(err => {
+            console.error('failed to get data ... ', err);
+            alert('failed to get data');
+        });
+});
+
+const contentsRender = ( data )=>{
+    if( !Array.isArray( data ) ){
+        console.error('data format wrong: data is not an array.');
+        return;
+    }
+
+    const hn = {
+        n: 0,
+        h2 : 0,
+        h3 : 0,
+        h4 : 0,
+        h5 : 0,
+        toString : function( n ){
+            if( n==null ) n = this.n;
+
+            if(this.n== 2 ){
+                return `${this.h2}`;
+            }else if(this.n== 3 ){
+                return `${this.h2}-${this.h3}`;
+            }else if(this.n== 4 ){
+                return `${this.h2}-${this.h3}-${this.h4}`;
+            }else if(this.n== 5 ){
+                return `${this.h2}-${this.h3}-${this.h4}-${this.h5}`;
+            }
+            return `${this.h2}-${this.h3}-${this.h4}-${this.h5}`;
+        },
+        toSpan : function(n){
+            if( n==null ) n = this.n;
+
+            return `<span class="hn hn${this.n}">${this.toString()}</span>`;
+        },
+        getSpan5 : function(){
+            return `<span class="hn hn5">${this.h5}</span>`;
+        }
+    };
+
+    let renderedBlock = '';
+    for( const block of data ){
+        let renderedContent;
+        const blockType = block.type;
+        if( blockType == null ) continue;
+
+        if( blockType == 'h2' ){
+            hn.n = 2; hn.h5 = 0; hn.h4 = 0; hn.h3 = 0; hn.h2 += 1;
+            renderedContent = render_h( block.data , hn );
+        }else if( blockType == 'h3' ){
+            hn.n = 3; hn.h5 = 0; hn.h4 = 0; hn.h3 += 1;
+            renderedContent = render_h( block.data , hn );
+        }else if( blockType == 'h4' ){
+            hn.n = 4; hn.h5 = 0; hn.h4 += 1;
+            renderedContent = render_h( block.data , hn );
+        }else{
+            hn.n = 5; hn.h5 += 1;
+            if( blockType == 'api_basic' ){
+                renderedContent = render_api_basic( block.data , hn );
+            }else if( blockType == 'plainText' ){
+                renderedContent = `<p>${rawText_to_html(block.data)}</p>`;
+            }else{
+                console.error('unknown blockType: '+blockType);
+            }
+        }
+
+        renderedBlock += get_contentBlock( hn, blockType, renderedContent );
+        addCharye( block.data , hn );
+    }
+    docEl_content.innerHTML = renderedBlock;
+}
+
+const addCharye = ( data , hn )=>{
+    if( data.title != null ){
+        docEl_charye.innerHTML += `
+            <li><a href="#block-${hn.toString()}">${hn.toString()}: ${data.title}</a></li>`;
+    }
+}
+
+const get_contentBlock = ( hn , blockType , renderedContent )=>{
+    return `
+        <div id="block-${hn.toString()}" class="blockType-${blockType}">
+            ${renderedContent}
+        </div>`;
+}
+
+const render_h = ( data , hn )=>{
+    return `<h${hn.n}>${hn.toSpan(hn.n)} ${data.title}</h${hn.n}>`;
+}
+
+const map_to_trs = ( obj ) => {
+    if( typeof obj != 'object' ){
+        console.error('this is not an object ... ', obj);
+        return "";
+    }
+
+    let result = '<tr>';
+    for( const key in obj ){
+        result += `<th>${key}</th><td>${obj[key]}</td>`;
+    }
+    result += '</tr>';
+    return result ;
+}
+
+const rawText_to_html = ( text )=>{
+    if( typeof text != 'string' ){
+        console.error('text is not a string.', text);
+        return;
+    }
+
+    return text.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
+}
+
+const combineStrFor = ( funfun , list )=>{
+    if( !Array.isArray( list ) ){
+        console.error('list is not an array.', list);
+        return;
+    }
+
+    let result = '';
+    for( const el of list ){
+        result += funfun( el );
+    }
+    return result;
+}
+
+const notEmptyStr = ( text )=>{
+    if( text == null ) return false;
+    if( text == '' ) return false;
+    return true;
+}
+
+</script>
+</body>
+</html>

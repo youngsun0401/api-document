@@ -1,0 +1,66 @@
+
+.blockType-api_basic > * {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.blockType-api_basic > .request > * ,
+.blockType-api_basic > .response > * ,
+.blockType-api_basic > .example > * {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.blockType-api_basic table {
+    border: 1px solid black;
+}
+
+.blockType-api_basic > .summary caption {
+    background-color: #ffd;
+}
+.blockType-api_basic > .summary tbody > tr > th {
+    background-color: #ffe;
+}
+
+.blockType-api_basic > .request caption ,
+.blockType-api_basic > .response caption {
+    background-color: #ddf;
+}
+.blockType-api_basic > .response tbody > tr > th {
+    background-color: #eef;
+}
+
+.blockType-api_basic .innerTable {
+    background-color: grey;
+}
+.blockType-api_basic .innerTableDiv {
+    margin-left: 12px;
+}
+.blockType-api_basic .innerTableDiv caption {
+    background-color: #dfd;
+}
+.blockType-api_basic > .innerTableDiv tbody > tr > th {
+    background-color: #efe;
+}
+
+.blockType-api_basic > .example caption {
+    background-color: #fdd;
+}
+.blockType-api_basic > .example tbody > tr > th {
+    background-color: #fee;
+}
+
+.blockType-api_basic .blankTd {
+    padding: 1px;
+}
+.blockType-api_basic .blankTd0 {
+    background-color: #ccc;
+}
+.blockType-api_basic .blankTd1 {
+    background-color: #bdf;
+}
+.blockType-api_basic .blankTd2 {
+    background-color: #fbd;
+}
+.blockType-api_basic .blankTd3 {
+    background-color: #feb;
+}
