@@ -10,8 +10,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Nanum+Myeongjo&display=swap');
 
+@media print {
+    html{
+        width: 1000px;
+    }
+}
+
 body {
     font-family: sans-serif;
+    -webkit-print-color-adjust: exact;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 h1, h2 , h3 , h4 , h5 {
