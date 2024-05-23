@@ -5,23 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>test</title>
 <script src="js/render_api_basic.js"></script>
+<link rel="stylesheet" type="text/css" href="page.css">
 <link rel="stylesheet" type="text/css" href="css/api_basic.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Nanum+Myeongjo&display=swap');
-
-@media print {
-    html{
-        width: 1000px;
-    }
-}
-
-body {
-    font-family: sans-serif;
-    -webkit-print-color-adjust: exact;
-    max-width: 1000px;
-    margin: 0 auto;
-}
 
 h1, h2 , h3 , h4 , h5 {
     font-family: "Nanum Myeongjo" , serif;
@@ -51,7 +39,6 @@ h4 {
 
 table {
     width: 100%;
-    border-spacing: 0px;
     border-collapse: collapse;
     background-color: white;
     font-family: sans-serif;
@@ -166,6 +153,7 @@ const contentsRender = ( data )=>{
     for( const block of data ){
         i += 1;
         let renderedContent;
+        let pageBreak = false;
 
         const blockType = block.type;
         if( blockType == null ) continue;
@@ -182,6 +170,7 @@ const contentsRender = ( data )=>{
         }else{
             hn.step(5);
             if( blockType === 'api_basic' ){
+                pageBreak = true;
                 renderedContent = render_api_basic( block.data , hn );
             }else if( blockType === 'plainText' ){
                 renderedContent = `<p>${rawText_to_html(block.data)}</p>`;
@@ -190,7 +179,7 @@ const contentsRender = ( data )=>{
             }
         }
 
-        renderedBlock += get_contentBlock( i, blockType, renderedContent );
+        renderedBlock += get_contentBlock( i, blockType, renderedContent, pageBreak );
         addCharye( block.data , hn , i );
     }
     docEl_contents.innerHTML = renderedBlock;
@@ -203,9 +192,9 @@ const addCharye = ( data , hn , i )=>{
     }
 }
 
-const get_contentBlock = ( i , blockType , renderedContent )=>{
+const get_contentBlock = ( i , blockType , renderedContent , pageBreak )=>{
     return `
-        <div id="block-${i}" class="blockType-${blockType}">
+        <div id="block-${i}" class="blockType-${blockType}${pageBreak?" pageBreak":""}">
             ${renderedContent}
         </div>`;
 }

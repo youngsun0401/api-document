@@ -1,0 +1,35 @@
+@media print {
+    html{
+        width: 1000px;
+        -webkit-print-color-adjust: exact;
+    }
+    h1 , h2 , .pageBreak {
+        margin-top: 0;
+        page-break-before: always;
+    }
+    .blockType-h2 + .pageBreak ,
+    .blockType-h3 + .pageBreak ,
+    .blockType-h4 + .pageBreak {
+        page-break-before: auto;
+    }
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+@media screen {
+    html {
+        background-color: grey;
+    }
+    body {
+        padding: 50px 5%;
+    }
+}
+
+body {
+    font-family: sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: white;
+}
