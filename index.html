@@ -12,6 +12,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Nanum+Myeongjo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
 
 h1, h2 , h3 , h4 , h5 {
     font-family: "Nanum Myeongjo" , serif;
@@ -35,12 +36,17 @@ h3 {
 h4 {
     border-bottom: #222 3px dashed;
 }
+h5 {
+    font-size: 160%;
+}
 h6::before {
     content: '◆ ';
-    color: green;
+    color: orange;
 }
 .hn {
     font-size: 60%;
+    font-family: "Jua", sans-serif;
+    color: deeppink;
 }
 
 table {
@@ -166,12 +172,15 @@ const contentsRender = ( data )=>{
 
         if( blockType === 'h2' ){
             hn.step(2);
+            pageBreak = true;
             renderedContent = render_h( block.data , hn );
         }else if( blockType === 'h3' ){
             hn.step(3);
+            pageBreak = true;
             renderedContent = render_h( block.data , hn );
         }else if( blockType === 'h4' ){
             hn.step(4);
+            pageBreak = true;
             renderedContent = render_h( block.data , hn );
         }else{
             hn.step(5);

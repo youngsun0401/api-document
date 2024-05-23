@@ -3,13 +3,11 @@
         width: 1000px;
         -webkit-print-color-adjust: exact;
     }
-    h1 , h2 , .pageBreak {
+    .pageBreak {
         margin-top: 0;
         page-break-before: always;
     }
-    .blockType-h2 + .pageBreak ,
-    .blockType-h3 + .pageBreak ,
-    .blockType-h4 + .pageBreak {
+    .pageBreak + .pageBreak {
         page-break-before: auto;
     }
     a {
