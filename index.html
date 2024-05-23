@@ -102,10 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const contentsRender = ( data )=>{
-    if( !Array.isArray( data ) ){
-        console.error('data format wrong: data is not an array.');
-        return;
-    }
+    if( !typeCheck( data, 'Array' ) ) return ;
 
     const hn = {
         n: 0,
@@ -188,10 +185,7 @@ const render_h = ( data , hn )=>{
 }
 
 const map_to_trs = ( obj ) => {
-    if( typeof obj != 'object' ){
-        console.error('this is not an object ... ', obj);
-        return "";
-    }
+    if( !typeCheck( obj, 'object' ) ) return '';
 
     let result = '<tr>';
     for( const key in obj ){
@@ -202,19 +196,13 @@ const map_to_trs = ( obj ) => {
 }
 
 const rawText_to_html = ( text )=>{
-    if( typeof text != 'string' ){
-        console.error('text is not a string.', text);
-        return;
-    }
+    if( !typeCheck( text, 'string' ) ) return ;
 
     return text.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
 }
 
 const combineStrFor = ( funfun , list )=>{
-    if( !Array.isArray( list ) ){
-        console.error('list is not an array.', list);
-        return;
-    }
+    if( !typeCheck( list, 'Array' ) ) return ;
 
     let result = '';
     for( const el of list ){
@@ -227,6 +215,18 @@ const notEmptyStr = ( text )=>{
     if( text == null ) return false;
     if( text == '' ) return false;
     return true;
+}
+
+const typeCheck = ( data , type , letsConsoleErr )=>{
+    if( type == 'Array' ){
+        if( Array.isArray( data ) ) return true;
+    }else{
+        if( typeof data == type ) return true;
+    }
+
+    if( letsConsoleErr == null || letsConsoleErr ) console.error(`data format error: type(${type})`, data)
+
+    return false;
 }
 
 </script>

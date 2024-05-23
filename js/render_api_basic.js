@@ -47,10 +47,7 @@ const render_api_basic = ( data , hn )=>{
         </div>`;
 
     function fieldsObj_to_table( obj ){
-        if( typeof obj != 'object' ){
-            console.error('wrong format: not an object.', obj);
-            return;
-        }
+        if( !typeCheck( obj, 'object' ) ) return '';
 
         return `<table class="objTable">
             <caption>${obj.name}</caption>
@@ -64,12 +61,9 @@ const render_api_basic = ( data , hn )=>{
     }
 
     function fieldList_to_trs( fields , depth ){
-        if( depth == null ) depth = 0;
+        if( !typeCheck( fields, 'Array' ) ) return '';
 
-        if( !Array.isArray( fields ) ){
-            console.error('wrong format: not an array.', fields);
-            return;
-        }
+        if( depth == null ) depth = 0;
 
         let result = '';
         for( const field of fields ){
@@ -79,10 +73,7 @@ const render_api_basic = ( data , hn )=>{
     }
 
     function field_to_tr( field , depth ){
-        if( typeof field != 'object' ){
-            console.error('wrong format: not an object.', field);
-            return;
-        }
+        if( !typeCheck( field, 'object' ) ) return '';
 
         let result = `
             <tr>
