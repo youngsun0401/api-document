@@ -25,6 +25,7 @@
 .blockType-api_basic > .response caption {
     background-color: #ddf;
 }
+.blockType-api_basic > .request tbody > tr > th ,
 .blockType-api_basic > .response tbody > tr > th {
     background-color: #eef;
 }

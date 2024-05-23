@@ -3,7 +3,7 @@ const render_api_basic = ( data , hn )=>{
 
     return `
         <h5>${hn.getSpan5()} ${data.title}</h5>
-        <table class="summary">
+        <table class="summary minThTable">
             <caption>summary</caption>
             <tbody>
                 <tr><th>기능</th><td>${data.summary.feature}</td></tr>
@@ -13,7 +13,7 @@ const render_api_basic = ( data , hn )=>{
         </table>
         <div class="request">
             <h6>REQUEST</h6>
-            <table class="request-head">
+            <table class="request-head minThTable">
                 <caption>head</caption>
                 <tbody>${map_to_trs(data.request.head)}</tbody>
             </table>
@@ -21,7 +21,7 @@ const render_api_basic = ( data , hn )=>{
         </div>
         <div class="response">
             <h6>RESPONSE</h6>
-            <table class="request-head">
+            <table class="request-head minThTable">
                 <caption>head</caption>
                 <tbody>${map_to_trs(data.response.head)}</tbody>
             </table>

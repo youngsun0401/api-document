@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>test</title>
+<script src="js/common.js"></script>
 <script src="js/render_api_basic.js"></script>
 <link rel="stylesheet" type="text/css" href="page.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
 <link rel="stylesheet" type="text/css" href="css/api_basic.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
@@ -32,6 +34,10 @@ h3 {
 }
 h4 {
     border-bottom: #222 3px dashed;
+}
+h6::before {
+    content: '◆ ';
+    color: green;
 }
 .hn {
     font-size: 60%;
@@ -201,37 +207,6 @@ const get_contentBlock = ( i , blockType , renderedContent , pageBreak )=>{
 
 const render_h = ( data , hn )=>{
     return `<h${hn.n}>${hn.toSpan(hn.n)} ${data.title}</h${hn.n}>`;
-}
-
-const map_to_trs = ( obj ) => {
-    if( !typeCheck( obj, 'object' ) ) return '';
-
-    let result = '<tr>';
-    for( const key in obj ){
-        result += `<th>${key}</th><td>${obj[key]}</td>`;
-    }
-    result += '</tr>';
-    return result ;
-}
-
-const rawText_to_html = ( text )=>{
-    if( !typeCheck( text, 'string' ) ) return ;
-
-    return text
-        .replace(/\n/g, '<br>')// 줄바꿈
-        .replace(/ {2,}/g, ( match )=>{// 띔
-            return '&nbsp;'.repeat( match.length -1 ) + ' ';
-        });
-}
-
-const combineStrFor = ( funfun , list )=>{
-    if( !typeCheck( list, 'Array' ) ) return ;
-
-    let result = '';
-    for( const el of list ){
-        result += funfun( el );
-    }
-    return result;
 }
 
 const notEmptyStr = ( text )=>{
