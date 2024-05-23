@@ -14,8 +14,11 @@ body {
     font-family: sans-serif;
 }
 
-h2 , h3 , h4 , h5 {
+h1, h2 , h3 , h4 , h5 {
     font-family: "Nanum Myeongjo" , serif;
+}
+h1 {
+    font-weight: bold;
 }
 h2 {
     margin-top: 100px;
@@ -74,11 +77,11 @@ td , th {
     "
 ></ul>
 
-<div id="content"></div>
+<div id="contents"></div>
 
 <script>
 const docEl_charye  = document.getElementById('charye');
-const docEl_content = document.getElementById('content');
+const docEl_contents = document.getElementById('contents');
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch('content-data.json')
@@ -110,22 +113,37 @@ const contentsRender = ( data )=>{
         h3 : 0,
         h4 : 0,
         h5 : 0,
-        toString : function( n ){
-            if( n==null ) n = this.n;
+        step : function( n ){
+            if( n==null || n<2 || n>5 ) return ;
 
-            if(this.n== 2 ){
-                return `${this.h2}`;
+            this.n = n;
+
+            if( n == 2 ){
+                this.h5 = 0; this.h4 = 0; this.h3 = 0; this.h2 += 1;
             }else if(this.n== 3 ){
-                return `${this.h2}-${this.h3}`;
+                this.h5 = 0; this.h4 = 0; this.h3 += 1;
             }else if(this.n== 4 ){
-                return `${this.h2}-${this.h3}-${this.h4}`;
+                this.h5 = 0; this.h4 += 1;
             }else if(this.n== 5 ){
+                this.h5 += 1;
+            }
+        },
+        toString : function( n ){
+            if( n == null ) n = this.n;
+
+            if(this.n=== 2 ){
+                return `${this.h2}`;
+            }else if(this.n=== 3 ){
+                return `${this.h2}-${this.h3}`;
+            }else if(this.n=== 4 ){
+                return `${this.h2}-${this.h3}-${this.h4}`;
+            }else if(this.n=== 5 ){
                 return `${this.h2}-${this.h3}-${this.h4}-${this.h5}`;
             }
             return `${this.h2}-${this.h3}-${this.h4}-${this.h5}`;
         },
         toSpan : function(n){
-            if( n==null ) n = this.n;
+            if( n == null ) n = this.n;
 
             return `<span class="hn hn${this.n}">${this.toString()}</span>`;
         },
@@ -134,48 +152,51 @@ const contentsRender = ( data )=>{
         }
     };
 
+    let i = 0;
     let renderedBlock = '';
     for( const block of data ){
+        i += 1;
         let renderedContent;
+
         const blockType = block.type;
         if( blockType == null ) continue;
 
-        if( blockType == 'h2' ){
-            hn.n = 2; hn.h5 = 0; hn.h4 = 0; hn.h3 = 0; hn.h2 += 1;
+        if( blockType === 'h2' ){
+            hn.step(2);
             renderedContent = render_h( block.data , hn );
-        }else if( blockType == 'h3' ){
-            hn.n = 3; hn.h5 = 0; hn.h4 = 0; hn.h3 += 1;
+        }else if( blockType === 'h3' ){
+            hn.step(3);
             renderedContent = render_h( block.data , hn );
-        }else if( blockType == 'h4' ){
-            hn.n = 4; hn.h5 = 0; hn.h4 += 1;
+        }else if( blockType === 'h4' ){
+            hn.step(4);
             renderedContent = render_h( block.data , hn );
         }else{
-            hn.n = 5; hn.h5 += 1;
-            if( blockType == 'api_basic' ){
+            hn.step(5);
+            if( blockType === 'api_basic' ){
                 renderedContent = render_api_basic( block.data , hn );
-            }else if( blockType == 'plainText' ){
+            }else if( blockType === 'plainText' ){
                 renderedContent = `<p>${rawText_to_html(block.data)}</p>`;
             }else{
                 console.error('unknown blockType: '+blockType);
             }
         }
 
-        renderedBlock += get_contentBlock( hn, blockType, renderedContent );
-        addCharye( block.data , hn );
+        renderedBlock += get_contentBlock( i, blockType, renderedContent );
+        addCharye( block.data , hn , i );
     }
-    docEl_content.innerHTML = renderedBlock;
+    docEl_contents.innerHTML = renderedBlock;
 }
 
-const addCharye = ( data , hn )=>{
+const addCharye = ( data , hn , i )=>{
     if( data.title != null ){
         docEl_charye.innerHTML += `
-            <li><a href="#block-${hn.toString()}">${hn.toString()}: ${data.title}</a></li>`;
+            <li><a href="#block-${i}">${hn.toString()}: ${data.title}</a></li>`;
     }
 }
 
-const get_contentBlock = ( hn , blockType , renderedContent )=>{
+const get_contentBlock = ( i , blockType , renderedContent )=>{
     return `
-        <div id="block-${hn.toString()}" class="blockType-${blockType}">
+        <div id="block-${i}" class="blockType-${blockType}">
             ${renderedContent}
         </div>`;
 }
@@ -198,7 +219,11 @@ const map_to_trs = ( obj ) => {
 const rawText_to_html = ( text )=>{
     if( !typeCheck( text, 'string' ) ) return ;
 
-    return text.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
+    return text
+        .replace(/\n/g, '<br>')// 줄바꿈
+        .replace(/ {2,}/g, ( match )=>{// 띔
+            return '&nbsp;'.repeat( match.length -1 ) + ' ';
+        });
 }
 
 const combineStrFor = ( funfun , list )=>{
@@ -221,10 +246,10 @@ const typeCheck = ( data , type , letsConsoleErr )=>{
     if( type == 'Array' ){
         if( Array.isArray( data ) ) return true;
     }else{
-        if( typeof data == type ) return true;
+        if( typeof data === type ) return true;
     }
 
-    if( letsConsoleErr == null || letsConsoleErr ) console.error(`data format error: type(${type})`, data)
+    if( letsConsoleErr == null || letsConsoleErr ) console.error(`data format error: this is not a ${type} ...`, data)
 
     return false;
 }

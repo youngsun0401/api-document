@@ -37,8 +37,7 @@ const render_api_basic = ( data , hn )=>{
                 : '<p>no request example</p>'
             }
             ${notEmptyStr(data.response.example)
-                ? `
-                    <table class="responseExample">
+                ? `<table class="responseExample">
                         <caption>response example</caption>
                         <tbody><tr><td class="code">${rawText_to_html(data.response.example)}</td></tr></tbody>
                     </table>`
