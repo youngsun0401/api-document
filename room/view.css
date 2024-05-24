@@ -31,3 +31,38 @@ body {
     margin: 0 auto;
     background-color: white;
 }
+
+h1, h2 , h3 , h4 , h5 {
+    font-family: "Nanum Myeongjo" , serif;
+}
+h1 {
+    font-weight: bold;
+}
+h2 {
+    margin-top: 100px;
+    padding: 5px;
+    background-color: #000;
+    color: #eee;
+    text-align: center;
+}
+h3 {
+    margin-top: 70px;
+    padding: 5px;
+    border-bottom: #222 5px solid;
+    text-align: center;
+}
+h4 {
+    border-bottom: #222 3px dashed;
+}
+h5 {
+    font-size: 160%;
+}
+h6::before {
+    content: '◆ ';
+    color: orange;
+}
+.hn {
+    font-size: 60%;
+    font-family: "Jua", sans-serif;
+    color: deeppink;
+}
