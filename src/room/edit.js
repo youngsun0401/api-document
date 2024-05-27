@@ -1,5 +1,5 @@
 let blockList ;
-const docEl_blockList = document.getElementById('blockList');
+const get_docEl_blockList = ()=> document.getElementById('blockList');
 
 export const render_room = ()=>{
     fetch('content-data.json')
@@ -21,6 +21,7 @@ export const render_room = ()=>{
 }
 
 function render_blockList(){
+    console.log(' render_blockList');
     let renderedContent = '';
     for( let block of blockList ){
         let title = block.data.title;
@@ -35,7 +36,7 @@ function render_blockList(){
                 <div class="editor">${getEditor( block )}</div>
             </li>`;
     }
-    docEl_blockList.innerHTML = renderedContent;
+    get_docEl_blockList().innerHTML = renderedContent;
 
     function getEditor( block ){
         let importer = get_importer( block.type );
@@ -46,7 +47,7 @@ function render_blockList(){
 export const activate_block = ( clickedEl )=>{
     //// 클릭한 요소만 클래스 'on', 나머지에서는 클래스 'on' 제거
     for( let prevSelected 
-            of docEl_blockList.querySelectorAll('.on') )
+            of get_docEl_blockList().querySelectorAll('.on') )
     {
         prevSelected.classList.remove('on');
     }
@@ -57,7 +58,7 @@ export const activate_block = ( clickedEl )=>{
 export const save = ()=>{
     let result = [];
     let i = 0;
-    for( let blockEl of docEl_blockList.children ){
+    for( let blockEl of get_docEl_blockList().children ){
         i++;
         try{
             result.push( block_to_jsonObj( blockEl ) );
@@ -94,12 +95,8 @@ const get_exporter = ( blockType )=>{
         : functionSet[''].exporter;
 }
 
-const importer_onlyTitle = ( block )=>{
-    return `<input class="onlyTitle" value="${ block.data.title }">`;
-}
-const exporter_onlyTitle = ( editorEl )=>{
-    return editorEl.querySelector('input').value ;
-}
+const importer_onlyTitle = block => `<input class="onlyTitle" value="${ block.data.title }">`;
+const exporter_onlyTitle = editorEl => editorEl.querySelector('input').value ;
 
 const functionSet = {
     '': {// default
