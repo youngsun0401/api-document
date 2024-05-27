@@ -96,7 +96,7 @@ const get_exporter = ( blockType )=>{
 }
 
 const importer_onlyTitle = block => `<input class="onlyTitle" value="${ block.data.title }">`;
-const exporter_onlyTitle = editorEl => editorEl.querySelector('input').value ;
+const exporter_onlyTitle = editorEl => { return { title: editorEl.querySelector('input').value } };
 
 const functionSet = {
     '': {// default
