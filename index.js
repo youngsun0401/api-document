@@ -63,7 +63,7 @@ const server = http.createServer(async (req, res)=>{
         console.log(log)
 
         const f = 
-            ( await fs.readFile( '.' + myRes.path , 'utf8') )
+            ( await fs.readFile( './src' + myRes.path , 'utf8') )
             .replace('{{room}}', myRes.room)
         ;
 
