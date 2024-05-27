@@ -1,6 +1,6 @@
-render_room();
+import { render_api_basic } from './view/render_api_basic.js';
 
-function render_room(){
+export const render_room = ()=>{
     fetch('content-data.json')
     .then(response => {
         if (!response.ok) {

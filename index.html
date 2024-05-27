@@ -11,9 +11,9 @@
 
 <link rel="stylesheet" type="text/css" href="css/base.css">
 
-<script>
-
+<script type="text/javascript">
 let roomPath = '{{room}}';
+let roomModule ;
 
 document.addEventListener('DOMContentLoaded', ()=>{
     goto_room( roomPath );
@@ -48,33 +48,24 @@ const load_room = async ( roomPath )=>{
     docEl_room.innerHTML = await load_text( src + '.html' );
 
     const importTags = docEl_room.querySelectorAll(':scope>input.import[type="hidden"]');
-    const importArr = importTags_to_importArr( importTags , src );
-    add_imports( importArr );
+    add_imports( importTags , src );
 }
 
-const importTags_to_importArr = ( importTags , defaultValue )=>{
-    const importArr = [];
+const add_imports = async ( importTags , defaultValue )=>{
     for( let i of importTags ){
-        importArr.push({
-            type : i.name ,
-            src : i.value === ''
-                    ? defaultValue 
-                    : i.value
-        })
-    }
-    return importArr ;
-}
-
-const add_imports = ( importArr )=>{
-    for( let i of importArr ){
-
-        let importFunc ;
-        if( i.type === 'js' ){
-            importFunc = load_js
-        }else if( i.type === 'css' ){
-            importFunc = load_css
+        if( i.name === 'js' ){
+            load_js( i.value ); 
+        }else if( i.name === 'css' ){
+            load_css( i.value == null || i.value === ''
+                ? defaultValue
+                : i.value );
+        }else if( i.name === 'js-module' ){
+            if( i.value == null || i.value === '' ){
+                roomModule = await load_jsModule( defaultValue );
+                roomModule.render_room();
+            }
+            else load_jsModule( i.value );
         }
-        importFunc( i.src );
     }
     // TODO 충돌같은 거 신경 안 쓰고 있음
 }

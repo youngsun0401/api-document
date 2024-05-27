@@ -1,4 +1,4 @@
-const render_api_basic = ( data , hn )=>{
+export const render_api_basic = ( data , hn )=>{
     const TABLE_DEPTH_MAX = 20;
 
     return `

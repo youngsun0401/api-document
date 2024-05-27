@@ -23,6 +23,11 @@ const load_js = async ( src )=>{ return new Promise((resolve,reject)=>{
     document.head.appendChild(script);
 })}
 
+const load_jsModule = async ( src )=>{
+    let result = await import( src + '.js');
+    return result ;
+}
+
 const load_css = async ( src )=>{ return new Promise((resolve,reject)=>{
     const link = document.createElement("link");
     link.rel = "stylesheet";
