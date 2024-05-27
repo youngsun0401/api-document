@@ -1,6 +1,6 @@
-loadRoom();
+render_room();
 
-function loadRoom(){
+function render_room(){
     fetch('content-data.json')
     .then(response => {
         if (!response.ok) {
@@ -10,9 +10,9 @@ function loadRoom(){
     })
     .then(data => {
         try{
-            contentsRender( data );
+            render_contents( data );
         }catch( err ){
-            console.error('failed to contentsRender ... ', err);
+            console.error('failed to render_contents ... ', err);
         }
     })
     .catch(err => {
@@ -21,7 +21,7 @@ function loadRoom(){
     });
 }
 
-function contentsRender ( data ){
+function render_contents ( data ){
     if( !typeCheck( data, 'Array' ) ) return ;
 
     const hn = {

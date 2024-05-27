@@ -1,5 +1,4 @@
 const load_text = async ( src )=>{
-    console.log(src)
     const response = await fetch( src );
     if( !response.ok ) throw new Error('Network response was not ok 222 ' + response.statusText);
 
