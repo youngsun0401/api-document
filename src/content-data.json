@@ -1,0 +1,543 @@
+[
+{
+    "type": "h2",
+    "data": {"title": "홀렐레"}
+},
+{
+    "type": "plainText",
+    "data": "홀렐레"
+},
+{
+    "type": "h2",
+    "data": {"title": "API"}
+},
+{
+    "type": "h3",
+    "data": {"title": "분류"}
+},
+{
+    "type": "h4",
+    "data": {"title": "소분류"}
+},
+{
+    "type": "api_basic",
+    "data": {
+        "title": "모임방 메시지 목록 1",
+        "summary": {
+            "feature": "모임방 메시지 목록",
+            "URI": "/meeting/message/list",
+            "method": "GET"
+        },
+        "request": {
+            "head": {
+                "Content-Type": "application/json",
+                "Content-Type2": "application/json2"
+            },
+            "body": [
+                {
+                    "name": "request body",
+                    "fields": [
+                        {
+                            "key": "room_id",
+                            "type": "정수",
+                            "description": "모임방 아이디",
+                            "required": true
+                        },
+                        {
+                            "key": "user_id",
+                            "type": "정수",
+                            "description": "사용자 아이디",
+                            "required": true
+                        }
+                    ]
+                }
+            ],
+            "example": "{\n    hey\n}"
+        },
+        "response": {
+            "head": {
+                "Content-Type": "application/json"
+            },
+            "body": [
+                {
+                    "name": "response body",
+                    "fields": [
+                        {
+                            "key": "message_id",
+                            "type": "정수",
+                            "description": "메시지 아이디",
+                            "required": true
+                        },
+                        {
+                            "key": "origin_message_id",
+                            "type": "정수",
+                            "description": "답글일 경우 원글의 아이디",
+                            "required": false
+                        },
+                        {
+                            "key": "user_id",
+                            "type": "정수",
+                            "description": "작성자 아이디",
+                            "required": true
+                        },
+                        {
+                            "key": "message_type",
+                            "type": "정수",
+                            "description": "메시지 분류\n0: 일반 메시지\n1: 파일 메시지\n2: 참여 시스템 메시지",
+                            "required": true
+                        },
+                        {
+                            "key": "message",
+                            "type": "문자열",
+                            "description": "메시지 내용",
+                            "required": true
+                        },
+                        {
+                            "key": "reactions",
+                            "type": "[]",
+                            "description": "메시지 반응 카운트",
+                            "required": true,
+                            "innerFields": [
+                                {
+                                    "key": "code",
+                                    "type": "정수",
+                                    "description": "이미지 index 번호",
+                                    "required": true
+                                },
+                                {
+                                    "key": "holele",
+                                    "type": "{}",
+                                    "description": "홀렐레",
+                                    "required": true,
+                                    "innerFields": [
+                                        {
+                                            "key": "code",
+                                            "type": "정수",
+                                            "description": "무언가의 번호",
+                                            "required": true
+                                        },
+                                        {
+                                            "key": "number",
+                                            "type": "정수",
+                                            "description": "번호",
+                                            "required": true,
+                                            "innerFields": [
+                                                {
+                                                    "key": "code",
+                                                    "type": "정수",
+                                                    "description": "이미지 index 번호",
+                                                    "required": true
+                                                },
+                                                {
+                                                    "key": "holele",
+                                                    "type": "{}",
+                                                    "description": "홀렐레",
+                                                    "required": true,
+                                                    "innerFields": [
+                                                        {
+                                                            "key": "code",
+                                                            "type": "정수",
+                                                            "description": "무언가의 번호",
+                                                            "required": true
+                                                        },
+                                                        {
+                                                            "key": "number",
+                                                            "type": "정수",
+                                                            "description": "번호",
+                                                            "required": true
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "key": "count",
+                                    "type": "정수",
+                                    "description": "개수",
+                                    "required": true
+                                }]
+                        },
+                        {
+                            "key": "time",
+                            "type": "날짜(yy.MM.dd)",
+                            "description": "작성시각",
+                            "required": true
+                        }
+                    ]
+                },
+                {
+                    "name": "Reaction",
+                    "fields": [
+                        {
+                            "key": "time",
+                            "type": "날짜(yy.MM.dd)",
+                            "description": "작성시각",
+                            "required": true
+                        },
+                        {
+                            "key": "time",
+                            "type": "날짜(yy.MM.dd)",
+                            "description": "작성시각",
+                            "required": true
+                        }
+                    ]
+                }
+            ],
+            "example": ""
+        }
+    }
+},
+{
+    "type": "api_basic",
+    "data": {
+        "title": "모임방 메시지 목록 2",
+        "summary": {
+            "feature": "모임방 메시지 목록",
+            "URI": "/meeting/message/list",
+            "method": "GET"
+        },
+        "request": {
+            "head": {
+                "Content-Type": "application/json",
+                "Content-Type2": "application/json2"
+            },
+            "body": [
+                {
+                    "name": "request body",
+                    "fields": [
+                        {
+                            "key": "room_id",
+                            "type": "정수",
+                            "description": "모임방 아이디",
+                            "required": true
+                        },
+                        {
+                            "key": "user_id",
+                            "type": "정수",
+                            "description": "사용자 아이디",
+                            "required": true
+                        }
+                    ]
+                }
+            ],
+            "example": "{\n    hey\n}"
+        },
+        "response": {
+            "head": {
+                "Content-Type": "application/json"
+            },
+            "body": [
+                {
+                    "name": "response body",
+                    "fields": [
+                        {
+                            "key": "message_id",
+                            "type": "정수",
+                            "description": "메시지 아이디",
+                            "required": true
+                        },
+                        {
+                            "key": "origin_message_id",
+                            "type": "정수",
+                            "description": "답글일 경우 원글의 아이디",
+                            "required": false
+                        },
+                        {
+                            "key": "user_id",
+                            "type": "정수",
+                            "description": "작성자 아이디",
+                            "required": true
+                        },
+                        {
+                            "key": "message_type",
+                            "type": "정수",
+                            "description": "메시지 분류\n0: 일반 메시지\n1: 파일 메시지\n2: 참여 시스템 메시지",
+                            "required": true
+                        },
+                        {
+                            "key": "message",
+                            "type": "문자열",
+                            "description": "메시지 내용",
+                            "required": true
+                        },
+                        {
+                            "key": "reactions",
+                            "type": "[]",
+                            "description": "메시지 반응 카운트",
+                            "required": true,
+                            "innerFields": [
+                                {
+                                    "key": "code",
+                                    "type": "정수",
+                                    "description": "이미지 index 번호",
+                                    "required": true
+                                },
+                                {
+                                    "key": "holele",
+                                    "type": "{}",
+                                    "description": "홀렐레",
+                                    "required": true,
+                                    "innerFields": [
+                                        {
+                                            "key": "code",
+                                            "type": "정수",
+                                            "description": "무언가의 번호",
+                                            "required": true
+                                        },
+                                        {
+                                            "key": "number",
+                                            "type": "정수",
+                                            "description": "번호",
+                                            "required": true,
+                                            "innerFields": [
+                                                {
+                                                    "key": "code",
+                                                    "type": "정수",
+                                                    "description": "이미지 index 번호",
+                                                    "required": true
+                                                },
+                                                {
+                                                    "key": "holele",
+                                                    "type": "{}",
+                                                    "description": "홀렐레",
+                                                    "required": true,
+                                                    "innerFields": [
+                                                        {
+                                                            "key": "code",
+                                                            "type": "정수",
+                                                            "description": "무언가의 번호",
+                                                            "required": true
+                                                        },
+                                                        {
+                                                            "key": "number",
+                                                            "type": "정수",
+                                                            "description": "번호",
+                                                            "required": true
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "key": "count",
+                                    "type": "정수",
+                                    "description": "개수",
+                                    "required": true
+                                }]
+                        },
+                        {
+                            "key": "time",
+                            "type": "날짜(yy.MM.dd)",
+                            "description": "작성시각",
+                            "required": true
+                        }
+                    ]
+                }
+            ],
+            "example": ""
+        }
+    }
+},
+{
+    "type": "h4",
+    "data": {"title": "소분류 w9e7yfo8sduihf"}
+},
+{
+    "type": "api_basic",
+    "data": {
+        "title": "모임방 메시지 목록 3",
+        "summary": {
+            "feature": "모임방 메시지 목록",
+            "URI": "/meeting/message/list",
+            "method": "GET"
+        },
+        "request": {
+            "head": {
+                "Content-Type": "application/json",
+                "Content-Type2": "application/json2"
+            },
+            "body": [
+                {
+                    "name": "request body",
+                    "fields": [
+                        {
+                            "key": "room_id",
+                            "type": "정수",
+                            "description": "모임방 아이디",
+                            "required": true
+                        },
+                        {
+                            "key": "user_id",
+                            "type": "정수",
+                            "description": "사용자 아이디",
+                            "required": true
+                        }
+                    ]
+                }
+            ],
+            "example": "{\n    hey\n}"
+        },
+        "response": {
+            "head": {
+                "Content-Type": "application/json"
+            },
+            "body": [
+                {
+                    "name": "response body",
+                    "fields": [
+                        {
+                            "key": "message_id",
+                            "type": "정수",
+                            "description": "메시지 아이디",
+                            "required": true
+                        },
+                        {
+                            "key": "message_type",
+                            "type": "정수",
+                            "description": "메시지 분류\n0: 일반 메시지\n1: 파일 메시지\n2: 참여 시스템 메시지",
+                            "required": true
+                        },
+                        {
+                            "key": "message",
+                            "type": "문자열",
+                            "description": "메시지 내용",
+                            "required": true
+                        },
+                        {
+                            "key": "reactions",
+                            "type": "[]",
+                            "description": "메시지 반응 카운트",
+                            "required": true,
+                            "innerFields": [
+                                {
+                                    "key": "code",
+                                    "type": "정수",
+                                    "description": "이미지 index 번호",
+                                    "required": true
+                                },
+                                {
+                                    "key": "count",
+                                    "type": "정수",
+                                    "description": "개수",
+                                    "required": true
+                                }]
+                        },
+                        {
+                            "key": "time",
+                            "type": "날짜(yy.MM.dd)",
+                            "description": "작성시각",
+                            "required": true
+                        }
+                    ]
+                }
+            ],
+            "example": ""
+        }
+    }
+},
+{
+    "type": "h3",
+    "data": {"title": "불류"}
+},
+{
+    "type": "h4",
+    "data": {"title": "냠냠쩝쩝"}
+},
+{
+    "type": "api_basic",
+    "data": {
+        "title": "모임방 메시지 목록 4",
+        "summary": {
+            "feature": "모임방 메시지 목록",
+            "URI": "/meeting/message/list",
+            "method": "GET"
+        },
+        "request": {
+            "head": {
+                "Content-Type": "application/json",
+                "Content-Type2": "application/json2"
+            },
+            "body": [
+                {
+                    "name": "request body",
+                    "fields": [
+                        {
+                            "key": "room_id",
+                            "type": "정수",
+                            "description": "모임방 아이디",
+                            "required": true
+                        },
+                        {
+                            "key": "user_id",
+                            "type": "정수",
+                            "description": "사용자 아이디",
+                            "required": true
+                        }
+                    ]
+                }
+            ],
+            "example": "{\n    hey\n}"
+        },
+        "response": {
+            "head": {
+                "Content-Type": "application/json"
+            },
+            "body": [
+                {
+                    "name": "response body",
+                    "fields": [
+                        {
+                            "key": "message_id",
+                            "type": "정수",
+                            "description": "메시지 아이디",
+                            "required": true
+                        },
+                        {
+                            "key": "message_type",
+                            "type": "정수",
+                            "description": "메시지 분류\n0: 일반 메시지\n1: 파일 메시지\n2: 참여 시스템 메시지",
+                            "required": true
+                        },
+                        {
+                            "key": "message",
+                            "type": "문자열",
+                            "description": "메시지 내용",
+                            "required": true
+                        },
+                        {
+                            "key": "reactions",
+                            "type": "[]",
+                            "description": "메시지 반응 카운트",
+                            "required": true,
+                            "innerFields": [
+                                {
+                                    "key": "code",
+                                    "type": "정수",
+                                    "description": "이미지 index 번호",
+                                    "required": true
+                                },
+                                {
+                                    "key": "count",
+                                    "type": "정수",
+                                    "description": "개수",
+                                    "required": true
+                                }]
+                        },
+                        {
+                            "key": "time",
+                            "type": "날짜(yy.MM.dd)",
+                            "description": "작성시각",
+                            "required": true
+                        }
+                    ]
+                }
+            ],
+            "example": ""
+        }
+    }
+}
+]

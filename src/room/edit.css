@@ -1,0 +1,15 @@
+
+.block:hover {
+	background-color: #eee;
+}
+.block .editor {
+	border: 1px dotted black;
+	display: none;
+}
+.block.on .editor {
+	display: block;
+}
+.block .editor textarea {
+	width: 100%;
+	height: 200px;
+}

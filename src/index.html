@@ -12,7 +12,10 @@
 <link rel="stylesheet" type="text/css" href="css/base.css">
 
 <script type="text/javascript">
+const DEFAULT_ROOM = '/view';
+
 let roomPath = '{{room}}';
+if( roomPath === '{{ro'+'om}}' ) roomPath = DEFAULT_ROOM;
 let roomModule ;
 
 document.addEventListener('DOMContentLoaded', ()=>{
@@ -21,7 +24,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 //// 뒤로가기
 window.addEventListener('popstate', ( event )=>{
-    load_room( event.state.roomPath );
+    load_room( event.state == null 
+        ? DEFAULT_ROOM
+        : event.state.roomPath );
 })
 
 const goto_room = async ( roomPath )=>{
@@ -35,13 +40,12 @@ const goto_room = async ( roomPath )=>{
 }
 
 const load_room = async ( roomPath )=>{
-    roomPath = roomPath === '{{ro'+'om}}'
-        ? '/view'
-        : roomPath.charAt(0) === '/'
-            ? roomPath
-            : '/' + roomPath
+    roomPath = roomPath.charAt(0) === '/'
+        ? roomPath
+        : '/' + roomPath
 
     console.log('ROOM : '+ roomPath)
+    if( roomPath === '/') roomPath = DEFAULT_ROOM;
 
     clear_room();
     const src = `/room` + roomPath;
