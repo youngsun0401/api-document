@@ -1,64 +1,13 @@
 const http = require('http');
 const fs = require('fs').promises;
-
-const get_ext = ( text )=>{
-    const s1 = text.split('/');
-    const s = s1[ s1.length - 1 ].split('.')
-    if( s.length <= 1 ) return null;
-
-    return s[ s.length - 1 ];
-}
-
-const url_to_myRes = ( url )=>{
-    let path ;
-    let ext ;
-    let room ;
-
-    if( url === '/' ){
-        path = '/index.html'
-        ext = 'html'
-        room = '/view'
-    }
-
-    else{
-        const rawExt = get_ext( url );
-
-        if( rawExt == null ){
-            path = '/index.html'
-            ext = 'html'
-            room = url
-        }else{
-            path = url
-            ext = rawExt
-        }
-    }
-
-
-    return {
-        path : path,
-        ext  : ext,
-        room : room,
-    };
-}
-
-const ext_to_contentType = ( ext )=>{
-    if( ext === 'html')    return 'text/html; charset=utf-8';
-    if( ext === 'css')     return 'text/css';
-    if( ext === 'js')      return 'application/javascript';
-    if( ext === 'json')    return 'application/json';
-    if( ext === 'png')     return 'image/png';
-    if( ext === 'jpg'
-     || ext === 'jpeg')    return 'image/jpeg';
-
-    return 'text/plain';
-}
+const parse_url = require('./mod/parse_url.js');
 
 const server = http.createServer(async (req, res)=>{
     let log = '';
     log += (`[${req.method}] ${req.url}`)
 
     try{
-        const myRes = url_to_myRes( req.url );
+        const myRes = parse_url( req.url );
 
         console.log(log)
 
@@ -70,7 +19,7 @@ const server = http.createServer(async (req, res)=>{
         const ext = myRes.ext;
         res.writeHead(
             200,
-            {'Content-Type': ext_to_contentType( myRes.ext )}
+            {'Content-Type': myRes.contentType }
         );
         res.end( f );
 
