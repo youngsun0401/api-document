@@ -1,0 +1,40 @@
+{
+"maptest": {
+	"a": "STRING",
+	"b": {
+		"b1": "STRING",
+		"b2": "STRING"
+	}
+},
+"h2": "onlyTitle",
+"h3": "onlyTitle",
+"h4": "onlyTitle",
+"plainTEXT": "TEXT",
+"api_basic": {
+	"title": "STRING",
+	"summary": {
+		"feature": "STRING",
+		"URI": "STRING-CODE",
+		"method": "STRING-CODE"
+	},
+	"request": {
+		"head": {},
+		"body": ["named_table"]
+	}
+},
+"onlyTitle": {
+	"title": "STRING"
+},
+"named_table": {
+	"name": "STRING",
+	"fields": ["field"]
+},
+"field": {
+	"key": "STRING",
+	"type": "TEXT",
+	"description": "TEXT",
+	"required": "BOOLEAN"
+}
+}
+
+

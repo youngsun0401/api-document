@@ -1,6 +1,13 @@
 let blockList ;
 const get_docEl_blockList = ()=> document.getElementById('blockList');
 
+const CONTENT_FORMAT = await fetch('/contents-format-definition.json').then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+});
+
 export const render_room = ()=>{
     fetch('content-data.json')
     .then(response => {
@@ -15,16 +22,27 @@ export const render_room = ()=>{
         render_blockList();
     })
     .catch(err => {
-        console.error('failed to get data ... ', err);
-        alert('failed to get data');
+        console.error('failed to get json data ... ', err);
+        // alert('failed to get data');
     });
 }
 
 function render_blockList(){
-    console.log(' render_blockList');
     let renderedContent = '';
+
+    let i=0;
     for( let block of blockList ){
+        i++;
         let title = block.data.title;
+        let editorEL ;
+        try{
+            editorEL = get_editorEL( block );
+            console.log(editorEL);// TODO
+        }catch( err ){
+            console.error( i+'번 블록 불러오기 실패: '+ err.msg, err.errorTrail );
+            continue;
+        }
+        
         renderedContent += `
             <li class="block blockType-${block.type}"
                     onclick="roomModule.activate_block(this)"
@@ -33,14 +51,86 @@ function render_blockList(){
                     <span class="type">${block.type}</span>
                     <span class="title">${title == null ? '' : title}</span>
                 </p>
-                <div class="editor">${getEditor( block )}</div>
+                <div class="editor">${editorEL}</div>
             </li>`;
     }
     get_docEl_blockList().innerHTML = renderedContent;
 
-    function getEditor( block ){
-        let importer = get_importer( block.type );
-        return importer( block );
+    function get_editorEL( block ){
+        return recursive( block.data, block.type, block.type, [] );
+
+        function recursive( value , type , name , errorTrail ){
+            errorTrail.push( name );
+            if( type == null )
+                throw {
+                msg: '이 타입은 정의되어있지 않습니다',
+                errorTrail: errorTrail,
+            };
+
+            //// TODO ?로 시작하는
+
+            //// leaf
+            if( typeCheck( type, 'string', false ) ){
+                //// primative types
+                if( type === 'STRING')      { errorTrail.pop(); return `<input class="${name}" value="${value}" />`;}
+                if( type === 'STRING-CODE') { errorTrail.pop(); return `<input class="${name} code" value="${value}" />`;}
+                if( type === 'TEXT')        { errorTrail.pop(); return `<textarea class="${name}">${value}</textarea>`;}
+                if( type === 'TEXT-CODE')   { errorTrail.pop(); return `<textarea class="${name} code">${value}</textarea>`;}
+                if( type === 'BOOLEAN')     { errorTrail.pop(); return `<input class="${name}" value="${value}" />`;}// TODO
+                //// defined types
+                let result = recursive( value, CONTENT_FORMAT[ type ], name, errorTrail );
+                errorTrail.pop();
+                return result;
+            }
+            //// list
+            else if( typeCheck( type, 'Array', false ) ){
+                if( !typeCheck( value, 'Array', false ) ){
+                    throw {
+                        msg: '형식에 맞지 않는 값',
+                        type: type,
+                        value: value,
+                        errorTrail: errorTrail,
+                    };
+                }
+                //// TODO 같은거 반복
+                let itemsEl = '';
+                for( let i=0; i<value.length; i++ ){
+                    itemsEl += `<li>${recursive( value[i], type[0], i, errorTrail )}</li>`;
+                }
+                let result = `<ul class="${name}">${itemsEl}</ul>`;
+                errorTrail.pop();
+                return result ;
+            }
+            //// map
+            else if( typeCheck( type, 'object', false ) ){
+                if( !typeCheck( value, 'object', false ) ){
+                    throw {
+                        msg: '형식에 맞지 않는 값',
+                        type: type,
+                        value: value,
+                        errorTrail: errorTrail,
+                    };
+                }
+                //// TODO 빈 옵젝인 경우 자유
+                let fieldsEl = '';
+                for( let key in type ){
+                    fieldsEl += `
+                        <tr>
+                            <th>${key}</th>
+                            <td>${recursive( value[key], type[key], key, errorTrail )}</td>
+                        </tr>`;
+                }
+                let result = `
+                    <table class="${name} minThTable">
+                        <tbody>${fieldsEl}</tbody>
+                    </table>`;
+                errorTrail.pop();
+                return result ;
+            }
+            else{
+                throw {msg:'what is this ???'};
+            }
+        }
     }
 };
 
@@ -81,42 +171,3 @@ export const save = ()=>{
     }
 }
 
-const get_importer = ( blockType )=>{
-    let importer = functionSet[blockType]?.importer;
-    return importer != null
-        ? importer
-        : functionSet[''].importer;
-}
-
-const get_exporter = ( blockType )=>{
-    let exporter = functionSet[blockType]?.exporter;
-    return exporter != null
-        ? exporter
-        : functionSet[''].exporter;
-}
-
-const importer_onlyTitle = block => `<input class="onlyTitle" value="${ block.data.title }">`;
-const exporter_onlyTitle = editorEl => { return { title: editorEl.querySelector('input').value } };
-
-const functionSet = {
-    '': {// default
-        importer: block => `<textarea>${JSON.stringify( block.data, null, 4 )}</textarea>`,
-        exporter: editorEl => JSON.parse( editorEl.querySelector('textarea').value ),
-    },
-    'h2': {
-        importer: importer_onlyTitle,
-        exporter: exporter_onlyTitle,
-    },
-    'h3': {
-        importer: importer_onlyTitle,
-        exporter: exporter_onlyTitle,
-    },
-    'h4': {
-        importer: importer_onlyTitle,
-        exporter: exporter_onlyTitle,
-    },
-    'plainText': {
-        importer: block => `<textarea>${ block.data }</textarea>`,
-        exporter: editorEl => editorEl.querySelector('textarea').value ,
-    }
-}
